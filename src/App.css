@@ -1,8 +1,19 @@
-.App {
+main{
   text-align: center;
   justify-content: center;
   padding:10px 10px;
   margin: 10px 10px;
+}
+
+.footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.data-table{
+  margin-top: 5px;
+  margin-bottom: 10px;
 }
 
 

@@ -33,6 +33,7 @@ function App() {
 
   return (
     <main>
+      <h1>Admin-UI</h1>
       <UserTable users={users} handleDelete={handleDelete} handleEdit={handleEdit} />  
     </main>
   );

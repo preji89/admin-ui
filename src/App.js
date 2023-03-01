@@ -7,12 +7,11 @@ function App() {
 
   const [users,setUsers]= useState([]);
 
-  const handleDelete = (userId) => {
-    const updatedUsers = [...users];
-    const index = users.findIndex((user) => user.id === userId);
-    updatedUsers.splice(index, 1);
-    setUsers(updatedUsers);
+  const handleDelete = (userIds) => {
+    const updatedUsers = users.filter(user => !userIds.includes(user.id)); 
+    setUsers(updatedUsers);   
   }
+
 
   useEffect(()=>{
     fetch("https://geektrust.s3-ap-southeast-1.amazonaws.com/adminui-problem/members.json")
@@ -24,7 +23,7 @@ function App() {
 
   return (
     <main>
-      <UserTable users={users} handleDelete={handleDelete}/>  
+      <UserTable users={users} handleDelete={handleDelete} />  
     </main>
   );
 }

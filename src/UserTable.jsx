@@ -5,6 +5,9 @@ function UserTable({users,handleDelete}) {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedUsers, setSelectedUsers] = useState([]);
+  const [selectAll, setSelectAll] = useState(false);
+
 
   const filteredData = users.filter((item) => {
     return Object.values(item).some((value) =>
@@ -27,17 +30,41 @@ function UserTable({users,handleDelete}) {
     setSearchTerm(event.target.value);
   };
 
+  const handleSelectUserRow = (event,userId) => {
+    if(event.target.checked){
+        setSelectedUsers([...selectedUsers,userId]);
+    }else {
+        setSelectedUsers(selectedUsers.filter((id => userId !== id)));
+    }
+  };
+
+  const handleSelectAllUserRows = (event) => {
+    setSelectAll(event.target.checked);
+    if(event.target.checked){
+        const allUserIds = currentItems.map(user => user.id);
+        setSelectedUsers(allUserIds);
+    }else {
+        setSelectedUsers([]);
+    }
+  };
+
+  const handleDeleteSelected = ()=> {
+    handleDelete(selectedUsers);
+    setSelectedUsers([]);
+    setSelectAll(false);
+  }
+
 
   const renderTableRows = () => {
     return currentItems.map((item, index) => (
       <tr key={index}>
-        <td><input type="checkbox" id={item.id}/></td>
+        <td><input type="checkbox" checked={selectedUsers.includes(item.id)} onChange={e => handleSelectUserRow(e, item.id)} /></td>
         <td>{item.name}</td>
         <td>{item.email}</td>
         <td>{item.role}</td>
         <td>
             <i className="bi bi-pencil-square"style={{color:"gray",cursor:"pointer"}}/>   {"   "}
-            <i className='bi bi-trash' style={{color:"crimson",cursor:"pointer"}} onClick={()=>handleDelete(item.id)}/>
+            <i className='bi bi-trash' style={{color:"crimson",cursor:"pointer"}} onClick={()=>handleDelete([item.id])}/>
         </td>
       </tr>
     ));
@@ -73,7 +100,7 @@ function UserTable({users,handleDelete}) {
       <Table striped bordered hover>
         <thead>
           <tr>
-            <th><input type="checkbox" id="all"/></th>
+            <th><input type="checkbox" checked={selectAll} onChange={handleSelectAllUserRows}/></th>
             <th>Name</th>
             <th>Email</th>
             <th>Role</th>
@@ -83,8 +110,9 @@ function UserTable({users,handleDelete}) {
         <tbody>{renderTableRows()}</tbody>
       </Table>
       </div>
-      <div className='footer'>
-      <Button size="sm" variant="danger">Delete Selected</Button>
+
+      <div className='table-footer'>
+      <Button size="sm" variant="danger" onClick={handleDeleteSelected}>Delete Selected</Button>
       <Pagination>
       <Pagination.First onClick={()=>{setCurrentPage(1)}} />
       <Pagination.Prev onClick={()=>{currentPage===1?setCurrentPage(1):setCurrentPage(currentPage-1)}}/>
@@ -92,8 +120,7 @@ function UserTable({users,handleDelete}) {
       <Pagination.Next onClick={()=>{currentPage===totalPages?setCurrentPage(totalPages):setCurrentPage(currentPage+1)}}/>
       <Pagination.Last onClick={()=>{setCurrentPage(totalPages)}}/>  
      </Pagination>
-      </div>
-      
+      </div>   
     </div>
   );
 }

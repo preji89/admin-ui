@@ -5,7 +5,7 @@ main{
   margin: 10px 10px;
 }
 
-.footer {
+.table-footer {
   display: flex;
   flex-direction: row;
   justify-content: space-between;

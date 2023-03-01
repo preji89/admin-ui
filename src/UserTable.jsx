@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import TableRow from './TableRow';
 import { Button, Table, Pagination, FormControl } from 'react-bootstrap';
 
-function UserTable({users,handleDelete}) {
+function UserTable({users,handleDelete,handleEdit}) {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
   const [searchTerm, setSearchTerm] = useState('');
@@ -56,19 +57,11 @@ function UserTable({users,handleDelete}) {
 
 
   const renderTableRows = () => {
-    return currentItems.map((item, index) => (
-      <tr key={index}>
-        <td><input type="checkbox" checked={selectedUsers.includes(item.id)} onChange={e => handleSelectUserRow(e, item.id)} /></td>
-        <td>{item.name}</td>
-        <td>{item.email}</td>
-        <td>{item.role}</td>
-        <td>
-            <i className="bi bi-pencil-square"style={{color:"gray",cursor:"pointer"}}/>   {"   "}
-            <i className='bi bi-trash' style={{color:"crimson",cursor:"pointer"}} onClick={()=>handleDelete([item.id])}/>
-        </td>
-      </tr>
-    ));
-  };
+    return currentItems.map(item => (
+        <TableRow key={item.id} item={item} handleEdit={handleEdit} handleDelete={handleDelete} handleSelectUserRow={handleSelectUserRow} selectedUsers={selectedUsers} />
+      ));
+    };
+  
 
   
   const renderPaginationItems = () => {

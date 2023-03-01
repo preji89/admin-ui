@@ -12,6 +12,16 @@ function App() {
     setUsers(updatedUsers);   
   }
 
+  const handleEdit= (userId,data) => {
+    const updatedUsers = users.map(user => {
+      if (user.id === userId) {
+        return { ...user, ...data };
+      }
+      return user;
+    });
+    setUsers(updatedUsers);
+  };
+
 
   useEffect(()=>{
     fetch("https://geektrust.s3-ap-southeast-1.amazonaws.com/adminui-problem/members.json")
@@ -23,7 +33,7 @@ function App() {
 
   return (
     <main>
-      <UserTable users={users} handleDelete={handleDelete} />  
+      <UserTable users={users} handleDelete={handleDelete} handleEdit={handleEdit} />  
     </main>
   );
 }
